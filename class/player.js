@@ -4,6 +4,7 @@ class Player {
         this.name = name;
         this.currentRoom = startingRoom;
         this.items = [];
+        this.hp = 5;
     }
 
     move(direction) {
@@ -32,24 +33,46 @@ class Player {
     }
 
     takeItem(itemName) {
-
-        // Fill this in
-
+        const item = this.currentRoom.getItemByName(itemName);
+        this.items.push(item);
+        const itemIndex = this.currentRoom.items.indexOf(item);
+        this.currentRoom.items.splice(itemIndex, 1);
+        console.log(`You picked up ${itemName} from the ${this.currentRoom.name}.`)
     }
 
     dropItem(itemName) {
-
-        // Fill this in
+        const item = this.getItemByName(itemName);
+        this.currentRoom.items.push(item);
+        const itemIndex = this.items.indexOf(item);
+        this.items.splice(itemIndex, 1);
+        console.log(`You dropped ${itemName} in ${this.currentRoom.name}.`);
     }
 
     eatItem(itemName) {
-        // Fill this in
+        const item = this.getItemByName(itemName);
+        const itemIndex = this.items.indexOf(itemName);
 
+        if (item.isFood){
+            this.hp += item.heal;
+            this.items.splice(itemIndex, 1);
+            console.log(`You eat a ${itemName}, healing ${item.heal} points of damage.`);
+        } else {
+            console.log('You can only eat food...');
+        }
     }
 
     getItemByName(name) {
+        const item = this.items.find(item => item.name === name);
+        return item;
+    }
 
-        // Fill this in
+    attack(enemyName){
+        let enemy = this.currentRoom.getEnemyByName(enemyName);
+        enemy.takeDamage(1);
+    }
+
+    getHealth(){
+        console.log(`You have ${this.hp} health left.`);
     }
 }
 

@@ -21,6 +21,7 @@ function printHelp() {
     console.log("  Type 'take <item>' to take an item");
     console.log("  Type 'drop <item>' to drop an item");
     console.log("  Type 'eat <item>' to eat a food item");
+    console.log("  Type 'attack <enemy> to attack an enemy");
     console.log("  Type 'n', 's', 'e', 'w' to move");
     console.log("");
 }
@@ -53,7 +54,7 @@ function startGame() {
 
 
 function processCommand() {
-
+    player.getHealth();
     rl.question('> ', (cmd) => {
         cmd = cmd.toLowerCase();
 
@@ -89,8 +90,26 @@ function processCommand() {
 
             player.eatItem(itemName);
 
-        } else {
+        } else if (cmd.startsWith("attack ")) {
+            let enemyName = cmd.split(" ")[1];
+
+            player.attack(enemyName);
+        }
+        else {
             console.log("Invalid command. Type 'h' for help.");
+        }
+
+        if (player.currentRoom.enemies.length > 0){
+            let enemies = player.currentRoom.enemies;
+            for (const enemy of enemies){
+                enemy.attack(player);
+            }
+        }
+
+        if (player.hp < 1){
+            console.log("You died! Game over!");
+            rl.close();
+            return;
         }
 
         processCommand();

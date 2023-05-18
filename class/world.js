@@ -1,6 +1,7 @@
 const { Room } = require('./room');
 const { Item } = require('./item');
 const { Food } = require('./food');
+const { Enemy } = require('./enemy');
 
 class World {
     constructor() {
@@ -11,6 +12,7 @@ class World {
 
         const roomList = worldData.rooms;
         const itemList = worldData.items;
+        const enemyList = worldData.enemies;
 
         // Instantiate new room objects
         // Get name, id and description from room data
@@ -44,15 +46,22 @@ class World {
             let newItem;
 
             if (itemData.isFood) {
-                console.log("ERROR: Food not supported yet.");
-                // Fill this in
-                return;
+                newItem = new Food(itemData.name, itemData.description);
             } else {
                 newItem = new Item(itemData.name, itemData.description);
             }
 
             let itemRoom = this.rooms[itemData.room];
             itemRoom.items.push(newItem);
+       }
+       // instantiate enemies
+       for (const enemy of enemyList){
+        let newEnemy;
+        let enemyRoom = this.rooms[enemy.room];
+
+        newEnemy = new Enemy(enemy.name, enemy.hits, enemy.damage, enemyRoom);
+
+        enemyRoom.enemies.push(newEnemy)
        }
 
     }

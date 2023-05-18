@@ -5,6 +5,7 @@ class Room {
         this.description = description;
         this.exits = {};
         this.items = [];
+        this.enemies = [];
     }
 
     printRoom() {
@@ -44,8 +45,19 @@ class Room {
     }
 
     getItemByName(name) {
+        const item = this.items.find(item => item.name === name);
+        return item;
+    }
 
-        // Fill this in
+    getEnemyByName(name) {
+        const enemy = this.enemies.find(enemy => enemy.name === name);
+        return enemy;
+    }
+
+    removeEnemy(name){
+        const enemy = this.getEnemyByName(name);
+        const enemyIndex = this.enemies.indexOf(enemy);
+        this.enemies.splice(enemyIndex, 1);
     }
 
 }
